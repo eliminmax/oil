@@ -108,14 +108,13 @@ TEST test_str_contains() {
   b = str_contains(s, StrFromC("\0", 1));
   ASSERT(b == true);
 
-  // Does Oil use these more complex cases?
-
-#if 0 
   // Degenerate cases
   b = str_contains(StrFromC(""), StrFromC(""));
   ASSERT(b == true);
   b = str_contains(StrFromC("foo"), StrFromC(""));
   ASSERT(b == true);
+  b = str_contains(StrFromC(""), StrFromC("f"));
+  ASSERT(b == false);
 
   // Short circuit
   b = str_contains(StrFromC("foo"), StrFromC("too long"));
@@ -129,7 +128,6 @@ TEST test_str_contains() {
 
   b = str_contains(StrFromC("foo\0ab", 6), StrFromC("ab"));
   ASSERT(b == true);
-#endif
 
   PASS();
 }
