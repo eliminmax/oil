@@ -1,5 +1,6 @@
 #ifdef OLDSTL_BINDINGS
   #include "mycpp/oldstl_containers.h"
+  #include "mycpp/oldstl_builtins.h"
 #else
   #include "mycpp/gc_builtins.h"
   #include "mycpp/gc_containers.h"
@@ -107,6 +108,39 @@ double to_float(Str* s) {
   double result = atof(s->data_);
   return result;
 }
+
+// e.g. ('a' in 'abc')
+bool str_contains(Str* haystack, Str* needle) {
+  assert(len(needle) == 1);
+  return memchr(haystack->data_, needle->data_[0], len(haystack));
+}
+
+#if 0
+// e.g. ('a' in 'abc')
+bool str_contains(Str* haystack, Str* needle) {
+  // Common case
+  if (len(needle) == 1) {
+    return memchr(haystack->data_, needle->data_[0], len(haystack));
+  }
+
+  // General case. TODO: We could use a smarter substring algorithm.
+  if (len(needle) > len(haystack)) {
+    return false;
+  }
+
+  const char* end = haystack->data_ + len(haystack);
+  const char* last_possible = end - len(needle);
+  const char* p = haystack->data_;
+
+  while (p <= last_possible) {
+    if (memcmp(p, needle->data_, len(needle)) == 0) {
+      return true;
+    }
+    p++;
+  }
+  return false;
+}
+#endif
 
 Str* str_repeat(Str* s, int times) {
   // Python allows -1 too, and Oil used that

@@ -123,41 +123,6 @@ TEST test_list_iters() {
   PASS();
 }
 
-TEST test_str_contains() {
-  bool b;
-
-  log("  Str");
-
-  // Degenerate cases
-  b = str_contains(StrFromC(""), StrFromC(""));
-  ASSERT(b == true);
-  b = str_contains(StrFromC("foo"), StrFromC(""));
-  ASSERT(b == true);
-
-  // Short circuit
-  b = str_contains(StrFromC("foo"), StrFromC("too long"));
-  ASSERT(b == false);
-
-  b = str_contains(StrFromC("foo"), StrFromC("oo"));
-  ASSERT(b == true);
-
-  b = str_contains(StrFromC("foo"), StrFromC("ood"));
-  ASSERT(b == false);
-
-  b = str_contains(StrFromC("foo\0a", 5), StrFromC("a"));
-  ASSERT(b == true);
-
-  b = str_contains(StrFromC("foo\0ab", 6), StrFromC("ab"));
-  ASSERT(b == true);
-
-  // this ends with a NUL, but also has a NUL terinator.
-  Str* s = StrFromC("foo\0", 4);
-  b = str_contains(s, StrFromC("\0", 1));
-  ASSERT(b == true);
-
-  PASS();
-}
-
 TEST test_list_contains() {
   bool b;
 
@@ -603,7 +568,6 @@ int main(int argc, char** argv) {
   RUN_TEST(test_list_iters);
   RUN_TEST(test_dict);
 
-  RUN_TEST(test_str_contains);
   RUN_TEST(test_list_contains);
   RUN_TEST(test_sizeof);
 
